@@ -1,0 +1,10 @@
+# MNE sample dataset (auto-downloaded)
+MNE-sample-data/
+mne_data/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# (Optional) Ignore large FIF sample files only inside the dataset
+MNE-sample-data/**/*.fif
