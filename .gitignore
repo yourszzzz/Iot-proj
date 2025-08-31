@@ -1,0 +1,43 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache/bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+
+# MNE data cache (prevents MNE from downloading data into repo)
+MNE-sample-data/
+mne_data/
+sample/
+
+# Generated files
+*.fif
+*.npy
+*.npz
+*.pkl
+*.h5
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data directory (uncomment if you don't want to track your data)
+# data/
