@@ -4,7 +4,9 @@ import mne
 import warnings
 
 # Set MNE data cache outside the repo to prevent files in workspace
-os.environ.setdefault("MNE_DATA", "/tmp/mne_data")
+mne_data_path = "/tmp/mne_data"
+os.makedirs(mne_data_path, exist_ok=True)
+os.environ.setdefault("MNE_DATA", mne_data_path)
 
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore')
