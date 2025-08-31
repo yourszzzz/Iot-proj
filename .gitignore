@@ -1,10 +1,25 @@
-# MNE sample dataset (auto-downloaded)
-MNE-sample-data/
-mne_data/
+# Virtual environment
+.venv/
 
-# Python cache
+# Python cache/bytecode
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
 
-# (Optional) Ignore large FIF sample files only inside the dataset
-MNE-sample-data/**/*.fif
+# Logs / temp
+*.log
+*.tmp
+
+# MNE / numpy artifacts
+*.fif
+*.npy
+*.npz
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS metadata
+.DS_Store
+
+# Optional: ignore dataset if you don’t want it in repo
+# data/BCICIV_2a_gdf/
