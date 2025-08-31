@@ -1,3 +1,4 @@
+source .venv/bin/activate use this to o to .venv then run all main and other and deactivate to go back
 # Vibe Chat - EEG-based Device Control
 
 This project processes EEG data to simulate device control based on brain activity patterns.
