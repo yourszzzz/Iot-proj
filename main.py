@@ -1,5 +1,9 @@
+import os
 import numpy as np
 import mne
+
+# Set MNE data cache outside the repo to prevent files in workspace
+os.environ.setdefault("MNE_DATA", "/tmp/mne_data")
 
 print("Testing EEG processing with MNE sample data...")
 

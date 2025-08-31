@@ -1,6 +1,10 @@
+import os
 import numpy as np
 import mne
 import warnings
+
+# Set MNE data cache outside the repo to prevent files in workspace
+os.environ.setdefault("MNE_DATA", "/tmp/mne_data")
 
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore')
