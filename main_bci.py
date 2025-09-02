@@ -19,9 +19,10 @@ try:
     raw = mne.io.read_raw_gdf(data_file, preload=True, verbose=False)
     print(f"Loaded data from: {data_file}")
     
-    # Extract event markers
-    events = mne.find_events(raw, verbose=False)
+    # Extract event markers from annotations (for BCI Competition IV Dataset 2a)
+    events, event_id = mne.events_from_annotations(raw, verbose=False)
     print(f"Found {len(events)} events")
+    print(f"Event types: {event_id}")
     
     # Print the first few detected events
     print("First 10 events:\n", events[:10])
@@ -32,13 +33,14 @@ try:
         event_code = e[2]
         timestamp = e[0]
         
-        if event_code == 769:  # Left hand motor imagery
+        # Map the numeric codes back to original meanings
+        if event_code == 7:  # 769 - Left hand motor imagery
             print(f"Event {i+1}: Device ON (left hand) - timestamp: {timestamp}")
-        elif event_code == 770:  # Right hand motor imagery  
+        elif event_code == 8:  # 770 - Right hand motor imagery  
             print(f"Event {i+1}: Device OFF (right hand) - timestamp: {timestamp}")
-        elif event_code == 771:  # Feet motor imagery
+        elif event_code == 9:  # 771 - Feet motor imagery
             print(f"Event {i+1}: Device ACTION (feet) - timestamp: {timestamp}")
-        elif event_code == 772:  # Tongue motor imagery
+        elif event_code == 10:  # 772 - Tongue motor imagery
             print(f"Event {i+1}: Device STOP (tongue) - timestamp: {timestamp}")
         else:
             print(f"Event {i+1}: Other event (code: {event_code}) - timestamp: {timestamp}")
