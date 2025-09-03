@@ -1,4 +1,5 @@
 # Virtual environment
+venv310/
 .venv/
 venv/
 env/
