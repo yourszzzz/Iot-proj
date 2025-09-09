@@ -282,9 +282,12 @@ if __name__ == '__main__':
     print("   📍 Manual controls are DISABLED - Brain signals control devices!")
     print("="*60)
     
+    # Get port from environment variable for Render deployment
+    port = int(os.environ.get('PORT', 5000))
+    
     try:
-        print("🚀 Starting Flask-SocketIO server...")
-        socketio.run(app, host='0.0.0.0', port=5000, debug=False, allow_unsafe_werkzeug=True)
+        print(f"🚀 Starting Flask-SocketIO server on port {port}...")
+        socketio.run(app, host='0.0.0.0', port=port, debug=False, allow_unsafe_werkzeug=True)
     except KeyboardInterrupt:
         print("\n🛑 Shutting down...")
     finally:
