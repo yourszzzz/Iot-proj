@@ -1,5 +1,5 @@
 # 🧠 BCI IoT Control System - EEG-based Device Control
-
+check the output on - https://iot-proj-1.onrender.com
 This project processes real EEG data to control IoT devices based on brain activity patterns using motor imagery.
 
 ## 🚀 Quick Start
