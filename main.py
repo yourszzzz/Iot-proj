@@ -1,17 +1,8 @@
 #!/usr/bin/env python3
 """
-Sclass BCIDataProcessor:
-    def __init__(self):
-        self.raw_data = None
-        self.events = None
-        self.event_id = None
-        self.sampling_rate = 250  # Hz
-        self.channels = []
-        self.current_sample = 0
-        self.is_running = False
-        self.data_loaded = False
-        self.last_event_sample = -1000  # Cooldown trackingVERSION: EEG-based IoT Control System
-Loads data on-demand instead of at startup
+EEG-based IoT Control System
+Brain-Computer Interface for Smart Home Control
+Uses real BCI Competition IV Dataset 2a for motor imagery detection
 """
 
 import os
@@ -49,33 +40,55 @@ class BCIDataProcessor:
         self.last_event_sample = -1000  # Cooldown tracking
         
     def load_bci_data(self):
-        """Load the real BCI Competition IV Dataset 2a"""
+        """Load the real BCI Competition IV Dataset 2a or use demo data"""
         if self.data_loaded:
             return True
             
         try:
-            print("Loading BCI data from: data/BCICIV_2a_gdf/A01T.gdf")
-            
-            self.raw_data = mne.io.read_raw_gdf('data/BCICIV_2a_gdf/A01T.gdf', preload=True, verbose=False)
-            self.events, self.event_id = mne.events_from_annotations(self.raw_data, verbose=False)
+            # Try to load real BCI data first
+            bci_file_path = 'data/BCICIV_2a_gdf/A01T.gdf'
+            if os.path.exists(bci_file_path):
+                print("Loading REAL BCI data from: data/BCICIV_2a_gdf/A01T.gdf")
+                self.raw_data = mne.io.read_raw_gdf(bci_file_path, preload=True, verbose=False)
+                self.events, self.event_id = mne.events_from_annotations(self.raw_data, verbose=False)
+                print(f"✅ Loaded {len(self.events)} events from REAL BCI data")
+                self.current_sample = 91800  # Jump to motor imagery section
+            else:
+                print("Real BCI data not found - using MNE sample data for demo")
+                # Use MNE sample dataset as fallback
+                sample_data_folder = mne.datasets.sample.data_path()
+                sample_fname = sample_data_folder / 'MEG' / 'sample' / 'sample_audvis_filt-0-40_raw.fif'
+                self.raw_data = mne.io.read_raw_fif(sample_fname, preload=True, verbose=False)
+                
+                # Create simulated motor imagery events for demo
+                self.events = self._create_demo_events()
+                self.event_id = {'left_hand': 7, 'right_hand': 8, 'feet': 9, 'tongue': 10}
+                print(f"✅ Loaded DEMO data with {len(self.events)} simulated events")
+                self.current_sample = 1000
             
             self.channels = self.raw_data.ch_names
             self.sampling_rate = self.raw_data.info['sfreq']
             
-            print(f"✅ Loaded {len(self.events)} events from real BCI data")
             print(f"✅ Channels: {len(self.channels)}, Sampling rate: {self.sampling_rate} Hz")
-            print(f"🔍 Event ID mapping: {self.event_id}")
-            print(f"🔍 First 10 events: {self.events[:10] if len(self.events) > 0 else 'No events'}")
-            print(f"🔍 Unique event codes: {list(set(self.events[:, 2])) if len(self.events) > 0 else 'No events'}")
-            
             self.data_loaded = True
-            print(f"🎯 Jumping to sample 91800 to find motor imagery events faster...")
-            self.current_sample = 91800  # Jump close to the first motor imagery event
             return True
             
         except Exception as e:
             print(f"❌ Error loading BCI data: {e}")
             return False
+    
+    def _create_demo_events(self):
+        """Create simulated motor imagery events for demo"""
+        n_samples = min(50000, self.raw_data.n_times)
+        events = []
+        
+        # Create events every 5 seconds (simulated motor imagery)
+        event_types = [7, 8, 9, 10]  # left_hand, right_hand, feet, tongue
+        for i in range(5000, n_samples, 1250):  # Every 5 seconds at 250Hz
+            event_code = event_types[(i // 1250) % 4]  # Cycle through events
+            events.append([i, 0, event_code])
+        
+        return np.array(events)
     
     def get_current_eeg_sample(self):
         """Get current EEG sample from real data"""
