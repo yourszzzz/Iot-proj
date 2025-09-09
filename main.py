@@ -295,8 +295,15 @@ if __name__ == '__main__':
     print("   📍 Manual controls are DISABLED - Brain signals control devices!")
     print("="*60)
     
-    # Get port from environment variable for Render deployment
-    port = int(os.environ.get('PORT', 5000))
+    # Safe PORT handling for Render deployment
+    try:
+        port_env = os.environ.get('PORT', '5000')
+        if port_env and port_env.strip() and port_env.strip().isdigit():
+            port = int(port_env.strip())
+        else:
+            port = 5000
+    except (ValueError, TypeError):
+        port = 5000
     
     try:
         print(f"🚀 Starting Flask-SocketIO server on port {port}...")
